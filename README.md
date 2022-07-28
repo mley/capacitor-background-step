@@ -15,7 +15,9 @@ But cordova health plugin is not recommended on android device. Because it needs
 
 ```bash
 npm install capacitor-background-step
-npx cap sync
+ionic cap sync
+ionic cap buid android
+
 ```
 
 ## Modify main AndroidManifest.xml in Android studio
@@ -101,6 +103,7 @@ You can set some values in android/src/main/res directory.
 <docgen-index>
 
 * [`echo(...)`](#echo)
+* [`getToday()`](#gettoday)
 
 </docgen-index>
 
@@ -121,4 +124,32 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 
 --------------------
 
+
+### getToday()
+
+```typescript
+getToday() => Promise<{ date: string; total: number; }>
+```
+
+**Returns:** <code>Promise&lt;{ date: string; total: number; }&gt;</code>
+
+--------------------
+
 </docgen-api>
+
+
+# Step counting note
+```
+https://github.com/Park9eon/background-step-counter
+
+The above repository stores count & SQLITE work well, but it does not provide background service.
+
+```
+
+# Background service note
+```
+https://gist.github.com/varunon9/f2beec0a743c96708eb0ef971a9ff9cd
+https://github.com/varunon9/DynamicWallpaper/tree/always_running_service
+
+The background service will work only if you use WorkManager.
+```

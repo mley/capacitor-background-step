@@ -67,5 +67,13 @@ public class BackgroundstepPlugin extends Plugin {
         call.resolve(ret);
     }
 
+    @PluginMethod
+    public void getToday(PluginCall call) {
+        String value = call.getString("value");
 
+        JSObject ret = new JSObject();
+        ret.put("date", "2022-07-28");
+        ret.put("total", 3000);
+        call.resolve(ret);
+    }
 }
