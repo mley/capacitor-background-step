@@ -38,9 +38,9 @@ public class StepCountBackgroundService extends Service {
       0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
     Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-      .setContentTitle("스마일패스")
-      .setContentText("자동으로 걸음수를 카운팅합니다.")
-      .setSmallIcon(R.drawable.ic_launcher_foreground)
+      .setContentTitle(getString(R.string.notification_title))
+      .setContentText(getString(R.string.notification_text))
+      .setSmallIcon(R.drawable.ic_launcher_background)
       .setContentIntent(pendingIntent)
       .setColor(getResources().getColor(R.color.colorPrimary))
       .build();

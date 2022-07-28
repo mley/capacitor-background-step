@@ -1,6 +1,6 @@
 {
   "name": "capacitor-background-step",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "description": "capacitor plugin for counting step works in background",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -37,7 +37,7 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api backgroundstepPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api BackgroundstepPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",

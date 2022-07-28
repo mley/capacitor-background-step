@@ -32,23 +32,14 @@ public class BackgroundstepPlugin extends Plugin {
 
     public static void startService(Context context, Activity activity) {
 
-        int permission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACTIVITY_RECOGNITION);
+        if (!StepCountBackgroundService.isServiceRunning) {
+          Intent serviceIntent = new Intent(context, StepCountBackgroundService.class);
+          ContextCompat.startForegroundService(context, serviceIntent);
+        }
 
-        if(permission == PackageManager.PERMISSION_GRANTED) {
-            if (!StepCountBackgroundService.isServiceRunning) {
-                Intent serviceIntent = new Intent(context, StepCountBackgroundService.class);
-                ContextCompat.startForegroundService(context, serviceIntent);
-            }
-        }
-        else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACTIVITY_RECOGNITION},1);
-            }
-        }
         return;
     }
-
-
+    
     public static void startServiceViaWorker(Context context) {
         String UNIQUE_WORK_NAME = "StartMyServiceViaWorker";
         WorkManager workManager = WorkManager.getInstance(context);
@@ -75,5 +66,6 @@ public class BackgroundstepPlugin extends Plugin {
         ret.put("value", implementation.echo(value));
         call.resolve(ret);
     }
+
 
 }

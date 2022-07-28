@@ -1,9 +1,9 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { backgroundstepPlugin } from './definitions';
+import type { BackgroundstepPlugin } from './definitions';
 
-const backgroundstep = registerPlugin<backgroundstepPlugin>('backgroundstep', {
-  web: () => import('./web').then(m => new m.backgroundstepWeb()),
+const backgroundstep = registerPlugin<BackgroundstepPlugin>('backgroundstep', {
+  web: () => import('./web').then(m => new m.BackgroundstepWeb()),
 });
 
 export * from './definitions';

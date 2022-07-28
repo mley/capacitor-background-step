@@ -1,8 +1,8 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { backgroundstepPlugin } from './definitions';
+import type { BackgroundstepPlugin } from './definitions';
 
-export class backgroundstepWeb extends WebPlugin implements backgroundstepPlugin {
+export class BackgroundstepWeb extends WebPlugin implements BackgroundstepPlugin {
   async echo(options: { value: string }): Promise<{ value: string }> {
     console.log('ECHO', options);
     return options;

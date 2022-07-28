@@ -2,7 +2,7 @@ package com.naeiut.plugins.backgroundstep;
 
 import android.util.Log;
 
-public class backgroundstep {
+public class Backgroundstep {
 
     public String echo(String value) {
         Log.i("Echo", value);
