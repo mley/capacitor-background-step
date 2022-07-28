@@ -1,27 +1,23 @@
 package com.naeiut.plugins.backgroundstep;
 
 import com.getcapacitor.JSObject;
-import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.getcapacitor.annotation.PermissionCallback;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
 
-import androidx.core.app.ActivityCompat;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.work.WorkManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import java.util.concurrent.TimeUnit;
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
-import android.util.Log;
 
 @CapacitorPlugin(name = "Backgroundstep")
 public class BackgroundstepPlugin extends Plugin {
@@ -29,6 +25,7 @@ public class BackgroundstepPlugin extends Plugin {
     private Backgroundstep implementation = new Backgroundstep();
 
     private String TAG = "BackgroundstepPlugin";
+    private SQLiteDatabase db;
 
     public static void startService(Context context, Activity activity) {
 
@@ -39,7 +36,7 @@ public class BackgroundstepPlugin extends Plugin {
 
         return;
     }
-    
+
     public static void startServiceViaWorker(Context context) {
         String UNIQUE_WORK_NAME = "StartMyServiceViaWorker";
         WorkManager workManager = WorkManager.getInstance(context);
@@ -69,11 +66,12 @@ public class BackgroundstepPlugin extends Plugin {
 
     @PluginMethod
     public void getToday(PluginCall call) {
-        String value = call.getString("value");
 
-        JSObject ret = new JSObject();
-        ret.put("date", "2022-07-28");
-        ret.put("total", 3000);
-        call.resolve(ret);
+        int step = StepCountDatabaseHelper.getTodayStep(this.db);
+
+        JSObject response = new JSObject();
+        response.put("count", step);
+
+        call.resolve(response);
     }
 }

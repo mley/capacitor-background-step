@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { BackgroundstepPlugin } from './definitions';
+import type { BackgroundstepPlugin, StepDataInterface } from './definitions';
 
 export class BackgroundstepWeb extends WebPlugin implements BackgroundstepPlugin {
   async echo(options: { value: string }): Promise<{ value: string }> {
@@ -8,13 +8,9 @@ export class BackgroundstepWeb extends WebPlugin implements BackgroundstepPlugin
     return options;
   }
 
-  async getToday(): Promise<{ date: string, total: number }> {
-
-    var res = {
-      date: '2022-07-28',
-      total: 31
-    }
-
-    return res;
-  }
+  async getToday(): Promise<StepDataInterface> {
+    return {
+      count: 0
+    };
+  };
 }

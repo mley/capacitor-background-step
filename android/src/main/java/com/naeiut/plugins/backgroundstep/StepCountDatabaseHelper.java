@@ -5,10 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import androidx.annotation.RequiresApi;
+
 
 public class StepCountDatabaseHelper extends SQLiteOpenHelper {
 
@@ -20,6 +23,7 @@ public class StepCountDatabaseHelper extends SQLiteOpenHelper {
   private static final String TB_STEP = "step";
   private static final String TB_TIMESTAMP = "timestamp";
 
+
   StepCountDatabaseHelper(Context context) {
     super(context, DB_NAME, null, DB_VERSION);
   }
@@ -30,6 +34,40 @@ public class StepCountDatabaseHelper extends SQLiteOpenHelper {
     values.put(TB_TIMESTAMP, System.currentTimeMillis());
     db.insertOrThrow(TB_NAME, null, values);
   }
+
+  public static int getTodayStep(SQLiteDatabase db) {
+
+    int count = 0;
+
+    String sql = "select (max(" + TB_STEP + ") - min(" + TB_STEP + ")) as step from " + TB_NAME;
+    Cursor cursor = db.rawQuery(sql,null);
+
+    while (cursor.moveToNext()) {
+      count = cursor.getInt(0);
+    }
+
+    return count;
+
+  }
+//  @RequiresApi(api = Build.VERSION_CODES.O)
+//  public static int getTodayStep(SQLiteDatabase db) {
+//
+//    int count = 0;
+//    LocalDateTime s = LocalDate.now().atStartOfDay();
+//    LocalDateTime e = LocalDate.now().plusDays(1).atStartOfDay();
+//
+//    String sql = "select (max(" + TB_STEP + ") - min(" + TB_STEP + ")) as step from " + TB_NAME + " where " + TB_TIMESTAMP + " > " + s + " and " + TB_TIMESTAMP + " < " + e;
+//    Cursor cursor = db.rawQuery(sql,null);
+//
+//    while (cursor.moveToNext()) {      //다음 DB가 존재한다면 While문을 통해  CounterMember.Count 합을 저장한다
+//      count = cursor.getInt(0);
+//    }
+//
+//    return count;
+//
+//  }
+
+
 
   @Override
   public void onCreate(SQLiteDatabase db) {

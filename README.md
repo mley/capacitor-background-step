@@ -2,6 +2,7 @@
 
 capacitor plugin for counting step works in background.
 
+
 ## Platform caution
 
 This capacitor plugin is only for android project.
@@ -104,8 +105,11 @@ You can set some values in android/src/main/res directory.
 
 * [`echo(...)`](#echo)
 * [`getToday()`](#gettoday)
+* [Interfaces](#interfaces)
 
 </docgen-index>
+
+## API is under developing
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
@@ -128,12 +132,22 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 ### getToday()
 
 ```typescript
-getToday() => Promise<{ date: string; total: number; }>
+getToday() => Promise<StepDataInterface>
 ```
 
-**Returns:** <code>Promise&lt;{ date: string; total: number; }&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#stepdatainterface">StepDataInterface</a>&gt;</code>
 
 --------------------
+
+
+### Interfaces
+
+
+#### StepDataInterface
+
+| Prop        | Type                |
+| ----------- | ------------------- |
+| **`count`** | <code>number</code> |
 
 </docgen-api>
 
