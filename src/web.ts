@@ -13,4 +13,11 @@ export class BackgroundstepWeb extends WebPlugin implements BackgroundstepPlugin
       count: 0
     };
   };
+
+  async getStepData(options: { sDateTime: string; eDateTime: string; }): Promise<StepDataInterface> {
+    console.log('TERM', options);
+    return {
+      count: 0
+    };
+  }
 }

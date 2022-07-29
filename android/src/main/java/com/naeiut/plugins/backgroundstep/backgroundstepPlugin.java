@@ -16,8 +16,10 @@ import androidx.work.WorkManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -75,7 +77,7 @@ public class BackgroundstepPlugin extends Plugin {
         LocalDateTime s = LocalDate.now().atStartOfDay();
         LocalDateTime e = LocalDate.now().plusDays(1).atStartOfDay();
 
-        Log.d(TAG, s + "");
+//        Log.d(TAG, s + "");
 
         StepCountDatabaseHelper dbHelper = new StepCountDatabaseHelper(this.getActivity().getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -85,5 +87,26 @@ public class BackgroundstepPlugin extends Plugin {
         response.put("count", step);
 
         call.resolve(response);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @PluginMethod
+    public void getStepData(PluginCall call) {
+        String sDateTime = call.getString("sDateTime");
+        String eDateTime = call.getString("eDateTime");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime s = LocalDateTime.parse(sDateTime, formatter);
+        LocalDateTime e = LocalDateTime.parse(eDateTime, formatter);
+
+        StepCountDatabaseHelper dbHelper = new StepCountDatabaseHelper(this.getActivity().getApplicationContext());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        int step = StepCountDatabaseHelper.getStep(db,s,e);
+
+        JSObject response = new JSObject();
+        response.put("count", step);
+
+        call.resolve(response);
+
     }
 }

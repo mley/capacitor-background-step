@@ -10,7 +10,7 @@ This capacitor plugin is only for android project.
 ## IOS
 
 I recommend [cordova health plugin](https://github.com/dariosalvi78/cordova-plugin-health). 
-But cordova health plugin is not recommended on android device. Because it needs install Google Fit App.
+But cordova health plugin is not recommended on android device. Because it needs installing Google Fit App.
 
 ## Install
 
@@ -106,7 +106,11 @@ import { Backgroundstep } from 'capacitor-background-step';
 ...
 
 Backgroundstep.getToday().then((data:any) => {
-  console.log('testest',data);
+  console.log('Today step total:',data);
+});
+
+Backgroundstep.getStepData({ sDateTime: '2022-07-29 06:00:00', eDateTime: '2022-07-29 09:00:00'}).then((data:any) => {
+  console.log('3 Hours total:',data);
 });
 
 ```
@@ -118,6 +122,7 @@ Method 'echo' is not concern to this plugin.
 
 * [`echo(...)`](#echo)
 * [`getToday()`](#gettoday)
+* [`getStepData(...)`](#getstepdata)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -146,6 +151,21 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 ```typescript
 getToday() => Promise<StepDataInterface>
 ```
+
+**Returns:** <code>Promise&lt;<a href="#stepdatainterface">StepDataInterface</a>&gt;</code>
+
+--------------------
+
+
+### getStepData(...)
+
+```typescript
+getStepData(term: { sDateTime: string; eDateTime: string; }) => Promise<StepDataInterface>
+```
+
+| Param      | Type                                                   |
+| ---------- | ------------------------------------------------------ |
+| **`term`** | <code>{ sDateTime: string; eDateTime: string; }</code> |
 
 **Returns:** <code>Promise&lt;<a href="#stepdatainterface">StepDataInterface</a>&gt;</code>
 
