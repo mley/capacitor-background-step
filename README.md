@@ -99,7 +99,20 @@ public class MainActivity extends BridgeActivity {
 
 You can set some values in android/src/main/res directory.
 
+## Usage
+```
+import { Backgroundstep } from 'capacitor-background-step';
+
+...
+
+Backgroundstep.getToday().then((data:any) => {
+  console.log('testest',data);
+});
+
+```
+
 ## API
+Method 'echo' is not concern to this plugin.
 
 <docgen-index>
 
@@ -109,7 +122,6 @@ You can set some values in android/src/main/res directory.
 
 </docgen-index>
 
-## API is under developing
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->

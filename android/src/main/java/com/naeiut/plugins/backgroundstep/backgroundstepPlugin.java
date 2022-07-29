@@ -15,9 +15,14 @@ import androidx.core.content.ContextCompat;
 import androidx.work.WorkManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.util.Log;
 
 @CapacitorPlugin(name = "Backgroundstep")
 public class BackgroundstepPlugin extends Plugin {
@@ -25,7 +30,6 @@ public class BackgroundstepPlugin extends Plugin {
     private Backgroundstep implementation = new Backgroundstep();
 
     private String TAG = "BackgroundstepPlugin";
-    private SQLiteDatabase db;
 
     public static void startService(Context context, Activity activity) {
 
@@ -64,10 +68,18 @@ public class BackgroundstepPlugin extends Plugin {
         call.resolve(ret);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @PluginMethod
     public void getToday(PluginCall call) {
 
-        int step = StepCountDatabaseHelper.getTodayStep(this.db);
+        LocalDateTime s = LocalDate.now().atStartOfDay();
+        LocalDateTime e = LocalDate.now().plusDays(1).atStartOfDay();
+
+        Log.d(TAG, s + "");
+
+        StepCountDatabaseHelper dbHelper = new StepCountDatabaseHelper(this.getActivity().getApplicationContext());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        int step = StepCountDatabaseHelper.getStep(db,s,e);
 
         JSObject response = new JSObject();
         response.put("count", step);

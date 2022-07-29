@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+
 public class StepCountHelper implements SensorEventListener {
 
   private static final String TAG = "BackgroundService";
@@ -49,5 +50,6 @@ public class StepCountHelper implements SensorEventListener {
   public void close() {
     this.dbHelper.close();
   }
+
 
 }
