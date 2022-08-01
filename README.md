@@ -17,7 +17,7 @@ But cordova health plugin is not recommended on android device. Because it needs
 ```bash
 npm install capacitor-background-step
 ionic cap sync
-ionic cap buid android
+ionic cap build android
 
 ```
 
