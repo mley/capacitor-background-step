@@ -67,12 +67,7 @@ public class MainActivity extends BridgeActivity {
 
     // check & gain permission & start service
     int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION);
-    if(permission == PackageManager.PERMISSION_GRANTED) {
-      // start service
-      BackgroundstepPlugin.startService(this,this);
-      BackgroundstepPlugin.startServiceViaWorker(this);
-    }
-    else {
+    if(permission != PackageManager.PERMISSION_GRANTED) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION},1);
       }
@@ -86,8 +81,6 @@ public class MainActivity extends BridgeActivity {
     switch (requestCode) {
       case 1: {
         // start service after gaining permission
-        BackgroundstepPlugin.startService(this,this);
-        BackgroundstepPlugin.startServiceViaWorker(this);
       }
     }
   }
@@ -121,6 +114,8 @@ Method 'echo' is not concern to this plugin.
 <docgen-index>
 
 * [`echo(...)`](#echo)
+* [`serviceStart()`](#servicestart)
+* [`serviceStop()`](#servicestop)
 * [`getToday()`](#gettoday)
 * [`getStepData(...)`](#getstepdata)
 * [Interfaces](#interfaces)
@@ -142,6 +137,28 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 | **`options`** | <code>{ value: string; }</code> |
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### serviceStart()
+
+```typescript
+serviceStart() => Promise<resultInterface>
+```
+
+**Returns:** <code>Promise&lt;<a href="#resultinterface">resultInterface</a>&gt;</code>
+
+--------------------
+
+
+### serviceStop()
+
+```typescript
+serviceStop() => Promise<resultInterface>
+```
+
+**Returns:** <code>Promise&lt;<a href="#resultinterface">resultInterface</a>&gt;</code>
 
 --------------------
 
@@ -173,6 +190,13 @@ getStepData(term: { sDateTime: string; eDateTime: string; }) => Promise<StepData
 
 
 ### Interfaces
+
+
+#### resultInterface
+
+| Prop      | Type                 |
+| --------- | -------------------- |
+| **`res`** | <code>boolean</code> |
 
 
 #### StepDataInterface

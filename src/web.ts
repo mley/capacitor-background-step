@@ -1,8 +1,14 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { BackgroundstepPlugin, StepDataInterface } from './definitions';
+import type { BackgroundstepPlugin, StepDataInterface, resultInterface } from './definitions';
 
 export class BackgroundstepWeb extends WebPlugin implements BackgroundstepPlugin {
+  serviceStart(): Promise<resultInterface> {
+    throw new Error('Method not implemented.');
+  }
+  serviceStop(): Promise<resultInterface> {
+    throw new Error('Method not implemented.');
+  }
   async echo(options: { value: string }): Promise<{ value: string }> {
     console.log('ECHO', options);
     return options;

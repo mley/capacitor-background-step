@@ -6,6 +6,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
@@ -16,15 +17,14 @@ import androidx.work.WorkManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
-import android.util.Log;
 
 @CapacitorPlugin(name = "Backgroundstep")
 public class BackgroundstepPlugin extends Plugin {
@@ -34,14 +34,19 @@ public class BackgroundstepPlugin extends Plugin {
     private String TAG = "BackgroundstepPlugin";
 
     public static void startService(Context context, Activity activity) {
-
-        if (!StepCountBackgroundService.isServiceRunning) {
-          Intent serviceIntent = new Intent(context, StepCountBackgroundService.class);
-          ContextCompat.startForegroundService(context, serviceIntent);
-        }
-
-        return;
+      if (!StepCountBackgroundService.isServiceRunning) {
+        Intent serviceIntent = new Intent(context, StepCountBackgroundService.class);
+        ContextCompat.startForegroundService(context, serviceIntent);
+      }
     }
+
+  public static void stopService(Context context, Activity activity) {
+    if (StepCountBackgroundService.isServiceRunning) {
+      StepCountBackgroundService stepCountBackgroundService = new StepCountBackgroundService();
+      Intent serviceIntent = new Intent(context, StepCountBackgroundService.class);
+      StepCountBackgroundService.stopForegroundService(context, activity);
+    }
+  }
 
     public static void startServiceViaWorker(Context context) {
         String UNIQUE_WORK_NAME = "StartMyServiceViaWorker";
@@ -61,6 +66,12 @@ public class BackgroundstepPlugin extends Plugin {
         workManager.enqueueUniquePeriodicWork(UNIQUE_WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, request);
     }
 
+    public static void stopServiceViaWorker(Context context) {
+      String UNIQUE_WORK_NAME = "StartMyServiceViaWorker";
+      WorkManager workManager = WorkManager.getInstance(context);
+      workManager.cancelUniqueWork(UNIQUE_WORK_NAME);
+    }
+
     @PluginMethod
     public void echo(PluginCall call) {
         String value = call.getString("value");
@@ -68,6 +79,32 @@ public class BackgroundstepPlugin extends Plugin {
         JSObject ret = new JSObject();
         ret.put("value", implementation.echo(value));
         call.resolve(ret);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @PluginMethod
+    public void serviceStart(PluginCall call) {
+
+      startService(this.getActivity().getApplicationContext(), this.getActivity());
+      startServiceViaWorker(this.getActivity().getApplicationContext());
+
+      JSObject response = new JSObject();
+      response.put("result", true);
+
+      call.resolve(response);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @PluginMethod
+    public void serviceStop(PluginCall call) {
+
+      stopService(this.getActivity().getApplicationContext(), this.getActivity());
+      stopServiceViaWorker(this.getActivity().getApplicationContext());
+
+      JSObject response = new JSObject();
+      response.put("result", true);
+
+      call.resolve(response);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

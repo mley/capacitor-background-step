@@ -23,10 +23,10 @@ public class StepWorker extends Worker {
   @NonNull
   @Override
   public Result doWork() {
-    Log.d(TAG, "doWork called for: " + this.getId());
-    Log.d(TAG, "Service Running: " + StepCountBackgroundService.isServiceRunning);
+//    Log.d(TAG, "doWork called for: " + this.getId());
+//    Log.d(TAG, "Service Running: " + StepCountBackgroundService.isServiceRunning);
     if (!StepCountBackgroundService.isServiceRunning) {
-      Log.d(TAG, "starting service from doWork");
+//      Log.d(TAG, "starting service from doWork");
       Intent intent = new Intent(this.context, StepCountBackgroundService.class);
       ContextCompat.startForegroundService(context, intent);
     }
@@ -35,7 +35,7 @@ public class StepWorker extends Worker {
 
   @Override
   public void onStopped() {
-    Log.d(TAG, "onStopped called for: " + this.getId());
+//    Log.d(TAG, "onStopped called for: " + this.getId());
     super.onStopped();
   }
 }

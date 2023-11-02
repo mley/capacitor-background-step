@@ -43,6 +43,10 @@ public class StepCountHelper implements SensorEventListener {
     this.sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
   }
 
+  public void stop() {
+    this.sensorManager.unregisterListener(this, sensor);
+  }
+
   public void save(long step) {
     StepCountDatabaseHelper.save(this.db, step);
   }

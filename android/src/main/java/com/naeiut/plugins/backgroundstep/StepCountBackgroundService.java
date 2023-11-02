@@ -1,12 +1,17 @@
 package com.naeiut.plugins.backgroundstep;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.app.Service;
+import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.util.Log;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -20,9 +25,9 @@ public class StepCountBackgroundService extends Service {
   private StepCountHelper stepCountHelper;
 
   public static boolean isServiceRunning;
-  private String CHANNEL_ID = "NOTIFICATION_CHANNEL";
+  private String CHANNEL_ID = "sp_walk";
   private Context context;
-  
+
   public StepCountBackgroundService() {
     Log.d(TAG, "constructor called");
     isServiceRunning = false;
@@ -30,7 +35,6 @@ public class StepCountBackgroundService extends Service {
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-
 
     Log.d(TAG, "onStartCommand called");
     Intent notificationIntent = new Intent(this, com.getcapacitor.BridgeActivity.class);
@@ -40,9 +44,11 @@ public class StepCountBackgroundService extends Service {
     Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
       .setContentTitle(getString(R.string.notification_title))
       .setContentText(getString(R.string.notification_text))
-      .setSmallIcon(R.drawable.ic_launcher_background)
+//      .setSmallIcon(R.drawable.ic_launcher_background)
+      .setSmallIcon(R.mipmap.ic_launcher_foreground)
       .setContentIntent(pendingIntent)
-      .setColor(getResources().getColor(R.color.colorPrimary))
+      .setAutoCancel(true)
+//      .setColor(getResources().getColor(R.color.colorPrimary))
       .build();
 
     startForeground(1, notification);
@@ -50,14 +56,26 @@ public class StepCountBackgroundService extends Service {
     return START_STICKY;
   }
 
+  public static void stopForegroundService(Context context, Activity activity) {
+    StepCountHelper stepCountHelper = new StepCountHelper(context);
+    stepCountHelper.stop();
+    StepCountBackgroundService service = new StepCountBackgroundService();
+    service.stopSelf();
+    isServiceRunning = false;
+  }
+
   @Override
   public void onCreate() {
     super.onCreate();
+
+    int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION);
+    if(permission == PackageManager.PERMISSION_GRANTED) {
 //    Toast.makeText(this, "Service on create2", Toast.LENGTH_SHORT).show();
-    this.stepCountHelper = new StepCountHelper(getApplicationContext());
-    this.stepCountHelper.start();
-    createNotificationChannel();
-    isServiceRunning = true;
+      this.stepCountHelper = new StepCountHelper(getApplicationContext());
+      this.stepCountHelper.start();
+      createNotificationChannel();
+      isServiceRunning = true;
+    }
 
   }
 
