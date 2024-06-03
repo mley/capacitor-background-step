@@ -30,21 +30,39 @@ public class StepCountDatabaseHelper extends SQLiteOpenHelper {
     db.insertOrThrow(TB_NAME, null, values);
   }
 
-  public static int getStep(SQLiteDatabase db,LocalDateTime s, LocalDateTime e) {
+  // public static int getStep(SQLiteDatabase db,LocalDateTime s, LocalDateTime e) {
 
+  //   int count = 0;
+  //   String fname = "strftime('%Y-%m-%dT%H:%M',DATETIME(" + TB_TIMESTAMP + "/1000, 'unixepoch','localtime'))";
+
+  //   String sql = "select (max(" + TB_STEP + ") - min(" + TB_STEP + ")) as step from " + TB_NAME + " where " + fname + " >= '" + s + "' and " + fname + " < '" + e + "'";
+  //   Cursor cursor = db.rawQuery(sql,null);
+
+  //   while (cursor.moveToNext()) {
+  //     count = cursor.getInt(0);
+  //   }
+
+  //   return count;
+
+  // }
+
+  public static int getStep(SQLiteDatabase db, LocalDateTime s, LocalDateTime e) {
     int count = 0;
-    String fname = "strftime('%Y-%m-%dT%H:%M',DATETIME(" + TB_TIMESTAMP + "/1000, 'unixepoch','localtime'))";
-
-    String sql = "select (max(" + TB_STEP + ") - min(" + TB_STEP + ")) as step from " + TB_NAME + " where " + fname + " >= '" + s + "' and " + fname + " < '" + e + "'";
-    Cursor cursor = db.rawQuery(sql,null);
-
-    while (cursor.moveToNext()) {
-      count = cursor.getInt(0);
+    // Convert LocalDateTime to epoch seconds (Unix timestamp in seconds)
+    long startTime = s.atZone(ZoneId.systemDefault()).toEpochSecond();
+    long endTime = e.atZone(ZoneId.systemDefault()).toEpochSecond();
+    // Use the epoch milliseconds for the timestamp comparison
+    String sql = "select (max(" + TB_STEP + ") - min(" + TB_STEP + ")) as step from " + TB_NAME +
+                " where " + TB_TIMESTAMP + " >= " + (startTime * 1000) +
+                " and " + TB_TIMESTAMP + " < " + (endTime * 1000);
+    Cursor cursor = db.rawQuery(sql, null);
+    if (cursor.moveToFirst()) {
+        count = cursor.getInt(0);
     }
-
+    cursor.close(); // Don't forget to close the cursor
     return count;
-
   }
+
 
   @Override
   public void onCreate(SQLiteDatabase db) {
